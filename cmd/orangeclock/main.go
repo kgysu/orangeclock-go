@@ -11,9 +11,9 @@ import (
 	"time"
 )
 
-const displayFullReloadInterval = 6 * time.Hour
-const requestDataInterval = 2 * time.Minute
-const targetDataServerAddr = "192.168.1.108:8080"
+const displayFullReloadInterval = 12 * time.Hour
+const requestDataInterval = 5 * time.Minute
+const targetDataServerAddr = "192.168.1.55:48080"
 const targetRequestPath = "/mempool/api/orangeclock"
 
 func main() {
@@ -29,7 +29,7 @@ func main() {
 func run() error {
 	time.Sleep(1 * time.Second)
 	logger := slog.New(slog.NewTextHandler(machine.Serial, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
+		Level: slog.LevelWarn,
 	}))
 	logger.Debug("starting..")
 

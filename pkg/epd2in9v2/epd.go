@@ -87,6 +87,7 @@ func (d *PaperDisplay) UpdateWlanStatus(status string) {
 }
 
 func (d *PaperDisplay) ClearAndSleep() {
+	d.Display.Init()
 	d.Display.Clear()
 	time.Sleep(2 * time.Second)
 	d.Display.Sleep()
