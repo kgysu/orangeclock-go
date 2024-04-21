@@ -63,7 +63,7 @@ func NewHttpClient(logger *slog.Logger, target string) (*HttpClient, string, err
 		slog.Error("tcpconn:closing", slog.String("err", err))
 		conn.Close()
 		for !conn.State().IsClosed() {
-			slog.Info("tcpconn:waiting", slog.String("state", conn.State().String()))
+			slog.Debug("tcpconn:waiting", slog.String("state", conn.State().String()))
 			time.Sleep(1000 * time.Millisecond)
 		}
 	}

@@ -197,11 +197,11 @@ func (d *Device) LutByHost(lut [159]uint8) {
 	d.SendData(lut[153])
 	d.SendCommand(SET_GATE_DRIVING_VOLTAGE) // gate voltage
 	d.SendData(lut[154])
-	d.SendCommand(0x04)  // source voltage
-	d.SendData(lut[155]) // VSH
-	d.SendData(lut[156]) // VSH2
-	d.SendData(lut[157]) // VSL
-	d.SendCommand(0x2c)  // VCOM
+	d.SendCommand(SET_SOURCE_DRIVING_VOLTAGE) // source voltage
+	d.SendData(lut[155])                      // VSH
+	d.SendData(lut[156])                      // VSH2
+	d.SendData(lut[157])                      // VSL
+	d.SendCommand(WRITE_VCOM_REGISTER)        // VCOM
 	d.SendData(lut[158])
 }
 
@@ -249,7 +249,7 @@ func (d *Device) Init() {
 	time.Sleep(100 * time.Millisecond)
 
 	d.ReadBusy()
-	d.SendCommand(0x12)
+	d.SendCommand(SW_RESET)
 	d.ReadBusy()
 
 	d.SendCommand(DRIVER_OUTPUT_CONTROL)
@@ -290,7 +290,7 @@ func (d *Device) Gray4Init() {
 
 	d.setWindows(8, 0, d.width, d.height-1)
 
-	d.SendCommand(0x3C)
+	d.SendCommand(BORDER_WAVEFORM_CONTROL)
 	d.SendData(0x04)
 
 	d.setCursor(1, 0)
@@ -306,7 +306,7 @@ func (d *Device) Clear() {
 		d.SendData(0xFF)
 	}
 
-	d.SendCommand(0x26)
+	d.SendCommand(WRITE_RAM_RED)
 	for i := 0; i < 4736; i++ {
 		d.SendData(0xFF)
 	}
@@ -358,18 +358,18 @@ func (d *Device) DisplayPartial() {
 	d.SendData(0x00)
 	d.SendData(0x00)
 
-	d.SendCommand(0x3C) // BorderWavefrom
+	d.SendCommand(BORDER_WAVEFORM_CONTROL)
 	d.SendData(0x80)
 
-	d.SendCommand(0x22)
+	d.SendCommand(DISPLAY_UPDATE_CONTROL_2)
 	d.SendData(0xC0)
-	d.SendCommand(0x20)
+	d.SendCommand(MASTER_ACTIVATION)
 	d.ReadBusy()
 
 	d.setWindows(0, 0, d.width-1, d.height-1)
 	d.setCursor(0, 0)
 
-	d.SendCommand(0x24) // write Black and White image to RAM
+	d.SendCommand(WRITE_RAM) // write Black and White image to RAM
 	for i := 0; i < 4736; i++ {
 		d.SendData(d.buffer[i])
 	}

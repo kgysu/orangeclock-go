@@ -48,17 +48,17 @@ func SetupWithDHCP(cfg SetupConfig) (*stacks.DHCPClient, *stacks.PortStack, *cyw
 	dev := cyw43439.NewPicoWDevice()
 	wificfg := cyw43439.DefaultWifiConfig()
 	//wificfg.Logger = logger // Uncomment to see in depth info on wifi device functioning.
-	logger.Info("initializing pico W device...")
+	logger.Debug("initializing pico W device...")
 	devInitTime := time.Now()
 	err = dev.Init(wificfg)
 	if err != nil {
 		return nil, nil, nil, "", errors.New("wifi init failed:" + err.Error())
 	}
-	logger.Info("cyw43439:Init", slog.Duration("duration", time.Since(devInitTime)))
+	logger.Debug("cyw43439:Init", slog.Duration("duration", time.Since(devInitTime)))
 	if len(pass) == 0 {
-		logger.Info("joining open network:", slog.String("ssid", ssid))
+		logger.Debug("joining open network:", slog.String("ssid", ssid))
 	} else {
-		logger.Info("joining WPA secure network", slog.String("ssid", ssid), slog.Int("passlen", len(pass)))
+		logger.Debug("joining WPA secure network", slog.String("ssid", ssid), slog.Int("passlen", len(pass)))
 	}
 	for {
 		// Set ssid/pass in secrets.go
@@ -70,7 +70,7 @@ func SetupWithDHCP(cfg SetupConfig) (*stacks.DHCPClient, *stacks.PortStack, *cyw
 		time.Sleep(5 * time.Second)
 	}
 	mac := dev.MACAs6()
-	logger.Info("wifi join success!", slog.String("mac", net.HardwareAddr(mac[:]).String()))
+	logger.Debug("wifi join success!", slog.String("mac", net.HardwareAddr(mac[:]).String()))
 	connectedSsid := ssid
 
 	stack := stacks.NewPortStack(stacks.PortStackConfig{
@@ -99,13 +99,13 @@ func SetupWithDHCP(cfg SetupConfig) (*stacks.DHCPClient, *stacks.PortStack, *cyw
 	i := 0
 	for !dhcpClient.IsDone() {
 		i++
-		logger.Info("DHCP ongoing...")
+		logger.Debug("DHCP ongoing...")
 		time.Sleep(time.Second / 2)
 		if i > 15 {
 			if !reqAddr.IsValid() {
 				return dhcpClient, stack, dev, connectedSsid, errors.New("DHCP did not complete and no static IP was requested")
 			}
-			logger.Info("DHCP did not complete, assigning static IP", slog.String("ip", cfg.RequestedIP))
+			logger.Debug("DHCP did not complete, assigning static IP", slog.String("ip", cfg.RequestedIP))
 			stack.SetAddr(reqAddr)
 			return dhcpClient, stack, dev, connectedSsid, nil
 		}
@@ -116,7 +116,7 @@ func SetupWithDHCP(cfg SetupConfig) (*stacks.DHCPClient, *stacks.PortStack, *cyw
 		primaryDNS = dnsServers[0]
 	}
 	ip := dhcpClient.Offer()
-	logger.Info("DHCP complete",
+	logger.Debug("DHCP complete",
 		slog.Uint64("cidrbits", uint64(dhcpClient.CIDRBits())),
 		slog.String("ourIP", ip.String()),
 		slog.String("dns", primaryDNS.String()),

@@ -4,6 +4,7 @@ package epd2in9v2
 const (
 	DRIVER_OUTPUT_CONTROL                = 0x01
 	SET_GATE_DRIVING_VOLTAGE             = 0x03
+	SET_SOURCE_DRIVING_VOLTAGE           = 0x04
 	BOOSTER_SOFT_START_CONTROL           = 0x0C
 	GATE_SCAN_START_POSITION             = 0x0F
 	DEEP_SLEEP_MODE                      = 0x10
@@ -14,6 +15,7 @@ const (
 	DISPLAY_UPDATE_CONTROL_1             = 0x21
 	DISPLAY_UPDATE_CONTROL_2             = 0x22
 	WRITE_RAM                            = 0x24
+	WRITE_RAM_RED                        = 0x26
 	WRITE_VCOM_REGISTER                  = 0x2C
 	WRITE_LUT_REGISTER                   = 0x32
 	SET_DUMMY_LINE_PERIOD                = 0x3A

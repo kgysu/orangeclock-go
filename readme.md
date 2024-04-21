@@ -5,7 +5,8 @@ Own implementation of the OrangeClock written in Go (tinygo).
 It uses a Raspberry Pico with Wi-Fi and a Waveshare E-Paper display.
 Hardware credits go to: [OrangeClock](https://orange-clock.com/)
 
-Also it needs a server in the local network which serves the content to display.
+Also it needs a webserver in the local network which serves the content to display.
+Something like this: [server](https://github.com/kgysu/orangeclock-server)
 
 
 

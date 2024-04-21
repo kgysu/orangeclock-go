@@ -14,6 +14,7 @@ import (
 const displayFullReloadInterval = 6 * time.Hour
 const requestDataInterval = 2 * time.Minute
 const targetDataServerAddr = "192.168.1.108:8080"
+const targetRequestPath = "/mempool/api/orangeclock"
 
 func main() {
 	for {
@@ -50,7 +51,7 @@ func run() error {
 			t = time.Now().Add(displayFullReloadInterval)
 		}
 
-		res := httpClient.NewRequest("/mempool/api/orangeclock")
+		res := httpClient.NewRequest(targetRequestPath)
 		logger.Debug("response to display", slog.String("content", res))
 		err := drawLines(display, res)
 		if err != nil {
